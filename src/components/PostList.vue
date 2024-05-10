@@ -1,9 +1,9 @@
 <template>
 
 	<div>
-		<h3>Les posts</h3>
+		<h3 class="posts-header">Les posts</h3>
 	</div>
-	<post-item class="post" v-for="post in posts" :key="post.id" :post="post" />
+	<post-item v-for="post in posts" :key="post.id" :post="post" />
 </template>
 
 <script>
@@ -23,8 +23,7 @@ export default {
 </script>
 
 <style scoped>
-.post {
-	padding: 15px;
-	border: 2px solid teal;
+.posts-header {
+	margin-bottom: 15px;
 }
 </style>

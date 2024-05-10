@@ -1,15 +1,18 @@
 <template>
 	<!--preventDefault avec $submit.prevent pour éviter le rechargement de la page-->
 	<form @submit.prevent>
-		<h4>Création d'un post</h4>
+		<h4>Créer un post</h4>
 		<input v-model="post.title" class="input" type="text" placeholder="Nom">
 		<input v-model="post.body" class="input" type="text" placeholder="Description">
-		<button class="btn" @click="createPost">Créer un post</button>
+		<my-button class="btn-create" @click="createPost">Create</my-button>
 	</form>
 </template>
 
 <script>
+import MyButton from './UI/MyButton.vue'
+
 export default {
+	components: { MyButton },
 	emits: ['create'],
 	data() {
 		return {
@@ -46,12 +49,8 @@ form {
 	margin-top: 15px;
 }
 
-.btn {
-	margin-top: 15px;
+.btn-create {
 	align-self: flex-end;
-	padding: 10px 15px;
-	background: none;
-	color: teal;
-	border: 1px solid teal;
+	margin-top: 15px;
 }
 </style>
