@@ -3,7 +3,7 @@
 	<div>
 		<h3 class="posts-header">Les posts</h3>
 	</div>
-	<post-item v-for="post in posts" :key="post.id" :post="post" />
+	<post-item v-for="post in posts" :key="post.id" :post="post" @remove="$emit('remove', post)" />
 </template>
 
 <script>
