@@ -2,17 +2,14 @@
 	<!--preventDefault avec $submit.prevent pour éviter le rechargement de la page-->
 	<form @submit.prevent>
 		<h4>Créer un post</h4>
-		<input v-model="post.title" class="input" type="text" placeholder="Nom">
-		<input v-model="post.body" class="input" type="text" placeholder="Description">
+		<my-input v-model="post.title" placeholder="Nom" />
+		<my-input v-model="post.body" placeholder="Description" />
 		<my-button class="btn-create" @click="createPost">Create</my-button>
 	</form>
 </template>
 
 <script>
-import MyButton from './UI/MyButton.vue'
-
 export default {
-	components: { MyButton },
 	emits: ['create'],
 	data() {
 		return {
