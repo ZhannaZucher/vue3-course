@@ -7,13 +7,15 @@
 		<my-modal v-model:show="modalVisible">
 			<post-form @create="createPost" />
 		</my-modal>
-		<post-list :posts="posts" @remove="removePost" />
+		<post-list v-if="!isLoading" :posts="posts" @remove="removePost" />
+		<div v-else>Is Loading...</div>
 	</div>
 </template>
 
 <script>
 import PostForm from '@/components/PostForm'
 import PostList from '@/components/PostList'
+import axios from 'axios'
 
 export default {
 	components: {
@@ -21,12 +23,9 @@ export default {
 	},
 	data() {
 		return {
-			posts: [
-				{ id: 1, title: 'Javascript 1', body: 'Je suis un post sur JS' },
-				{ id: 2, title: 'Javascript 2', body: 'Je suis un post sur JS' },
-				{ id: 3, title: 'Javascript 3', body: 'Je suis un post sur JS' },
-			],
-			modalVisible: false
+			posts: [],
+			modalVisible: false,
+			isLoading: false
 		}
 	},
 	methods: {
@@ -39,7 +38,22 @@ export default {
 		},
 		showModal() {
 			this.modalVisible = true
-		}
+		},
+		async fetchPosts() {
+			try {
+				this.isLoading = true
+				const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+				this.posts = response.data
+				console.log(response);
+			} catch (error) {
+				alert('Server error')
+			} finally {
+				this.isLoading = false
+			}
+		},
+	},
+	mounted() {
+		this.fetchPosts()
 	}
 }
 </script>
