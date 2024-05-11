@@ -3,11 +3,12 @@
 		<h1>Posts app</h1>
 		<div class="create-form">
 			<my-button @click="showModal">Créer un post</my-button>
+			<my-select v-model="selectedSort" :options="sortOptions"></my-select>
 		</div>
 		<my-modal v-model:show="modalVisible">
 			<post-form @create="createPost" />
 		</my-modal>
-		<post-list v-if="!isLoading" :posts="posts" @remove="removePost" />
+		<post-list v-if="!isLoading" :posts="sortedPosts" @remove="removePost" />
 		<div v-else>Is Loading...</div>
 	</div>
 </template>
@@ -25,7 +26,12 @@ export default {
 		return {
 			posts: [],
 			modalVisible: false,
-			isLoading: false
+			isLoading: false,
+			selectedSort: '',
+			sortOptions: [
+				{ value: 'title', name: 'Titre' },
+				{ value: 'body', name: 'Contenu' },
+			]
 		}
 	},
 	methods: {
@@ -44,7 +50,7 @@ export default {
 				this.isLoading = true
 				const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
 				this.posts = response.data
-				console.log(response);
+				console.log(response.data);
 			} catch (error) {
 				alert('Server error')
 			} finally {
@@ -54,7 +60,13 @@ export default {
 	},
 	mounted() {
 		this.fetchPosts()
-	}
+	},
+	computed: {
+		sortedPosts() {
+			//we sort the new array not the original one
+			return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+		}
+	},
 }
 </script>
 
@@ -72,5 +84,7 @@ export default {
 h1,
 .create-form {
 	margin: 15px 0;
+	display: flex;
+	justify-content: space-between;
 }
 </style>
