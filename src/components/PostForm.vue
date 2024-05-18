@@ -2,9 +2,9 @@
 	<!--preventDefault avec $submit.prevent pour éviter le rechargement de la page-->
 	<form @submit.prevent>
 		<h4>Créer un post</h4>
-		<my-input v-model="post.title" placeholder="Nom" />
-		<my-input v-model="post.body" placeholder="Description" />
-		<my-button class="btn-create" @click="createPost">Create</my-button>
+		<MyInput v-model="post.title" placeholder="Nom" />
+		<MyInput v-model="post.body" placeholder="Description" />
+		<MyInput class="btn-create" @click="createPost">Create</MyInput>
 	</form>
 </template>
 

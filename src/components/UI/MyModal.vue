@@ -9,7 +9,7 @@
 
 <script>
 export default {
-	name: 'my-modal',
+	name: 'MyModal',
 	props: {
 		show: {
 			type: Boolean,

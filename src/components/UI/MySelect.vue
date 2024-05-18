@@ -7,7 +7,7 @@
 
 <script>
 export default {
-	name: 'my-select',
+	name: 'MySelect',
 	emits: ['update:model-value'],
 	props: {
 		modelValue: {

@@ -2,13 +2,13 @@
 	<div class="app">
 		<h1>Posts app</h1>
 		<div class="create-form">
-			<my-button @click="showModal">Créer un post</my-button>
-			<my-select v-model="selectedSort" :options="sortOptions"></my-select>
+			<MyButton @click="showModal">Créer un post</MyButton>
+			<MySelect v-model="selectedSort" :options="sortOptions"></MySelect>
 		</div>
-		<my-modal v-model:show="modalVisible">
-			<post-form @create="createPost" />
-		</my-modal>
-		<post-list v-if="!isLoading" :posts="sortedPosts" @remove="removePost" />
+		<MyModal v-model:show="modalVisible">
+			<PostForm @create="createPost" />
+		</MyModal>
+		<PostList v-if="!isLoading" :posts="sortedPosts" @remove="removePost" />
 		<div v-else>Is Loading...</div>
 	</div>
 </template>
