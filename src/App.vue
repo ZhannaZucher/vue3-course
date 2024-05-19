@@ -11,21 +11,19 @@
 		</MyModal>
 		<PostList v-if="!isLoading" :posts="sortedAndSearhedPosts" @remove="removePost" />
 		<div v-else>Is Loading...</div>
-		<div class="page__wrapper">
-			<div v-for="pageNumber in totalPages" :key="pageNumber" class="page"
-				:class="{ 'current-page': page === pageNumber }" @click="changePage(pageNumber)">{{ pageNumber }}</div>
-		</div>
+		<PostPagination :totalPages="totalPages" :page="page" @change="goToPage" />
 	</div>
 </template>
 
 <script>
 import PostForm from '@/components/PostForm'
 import PostList from '@/components/PostList'
+import PostPagination from '@/components/PostPagination'
 import axios from 'axios'
 
 export default {
 	components: {
-		PostList, PostForm
+		PostList, PostForm, PostPagination
 	},
 	data() {
 		return {
@@ -54,7 +52,7 @@ export default {
 		showModal() {
 			this.modalVisible = true
 		},
-		changePage(pageNumber) {
+		goToPage(pageNumber) {
 			this.page = pageNumber
 		},
 		async fetchPosts() {
@@ -70,7 +68,7 @@ export default {
 				//calculating total number of pages (the API return 100 posts)
 				this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limitPostsPerPage)
 				this.posts = response.data
-				console.log(response.data);
+				// console.log(response.data);
 			} catch (error) {
 				alert('Server error')
 			} finally {
@@ -114,20 +112,5 @@ h1,
 	margin: 15px 0;
 	display: flex;
 	justify-content: space-between;
-}
-
-.page__wrapper {
-	display: flex;
-	margin-top: 15px;
-}
-
-.page {
-	border: 1px solid black;
-	padding: 10px;
-}
-
-.current-page {
-	border: 2px solid teal;
-	font-weight: bold;
 }
 </style>
