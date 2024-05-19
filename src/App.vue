@@ -11,6 +11,10 @@
 		</MyModal>
 		<PostList v-if="!isLoading" :posts="sortedAndSearhedPosts" @remove="removePost" />
 		<div v-else>Is Loading...</div>
+		<div class="page__wrapper">
+			<div v-for="pageNumber in totalPages" :key="pageNumber" class="page"
+				:class="{ 'current-page': page === pageNumber }" @click="changePage(pageNumber)">{{ pageNumber }}</div>
+		</div>
 	</div>
 </template>
 
@@ -30,6 +34,9 @@ export default {
 			isLoading: false,
 			selectedSort: '',
 			searchQuery: '',
+			page: 1,
+			limitPostsPerPage: 10,
+			totalPages: 0,
 			sortOptions: [
 				{ value: 'title', name: 'Titre' },
 				{ value: 'body', name: 'Contenu' },
@@ -47,10 +54,21 @@ export default {
 		showModal() {
 			this.modalVisible = true
 		},
+		changePage(pageNumber) {
+			this.page = pageNumber
+		},
 		async fetchPosts() {
 			try {
 				this.isLoading = true
-				const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+				//with params url will be :https://jsonplaceholder.typicode.com/posts?_page=1&_limit=10
+				const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+					params: {
+						_page: this.page,
+						_limit: this.limitPostsPerPage
+					}
+				})
+				//calculating total number of pages (the API return 100 posts)
+				this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limitPostsPerPage)
 				this.posts = response.data
 				console.log(response.data);
 			} catch (error) {
@@ -72,6 +90,11 @@ export default {
 			return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
 		}
 	},
+	watch: {
+		page() {
+			this.fetchPosts()
+		}
+	}
 }
 </script>
 
@@ -91,5 +114,20 @@ h1,
 	margin: 15px 0;
 	display: flex;
 	justify-content: space-between;
+}
+
+.page__wrapper {
+	display: flex;
+	margin-top: 15px;
+}
+
+.page {
+	border: 1px solid black;
+	padding: 10px;
+}
+
+.current-page {
+	border: 2px solid teal;
+	font-weight: bold;
 }
 </style>
