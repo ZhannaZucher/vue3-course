@@ -1,6 +1,7 @@
 <template>
 	<div class="app">
 		<h1>Posts app</h1>
+		<MyInput v-model="searchQuery" placeholder="Rechercher par titre..." />
 		<div class="create-form">
 			<MyButton @click="showModal">Créer un post</MyButton>
 			<MySelect v-model="selectedSort" :options="sortOptions"></MySelect>
@@ -8,7 +9,7 @@
 		<MyModal v-model:show="modalVisible">
 			<PostForm @create="createPost" />
 		</MyModal>
-		<PostList v-if="!isLoading" :posts="sortedPosts" @remove="removePost" />
+		<PostList v-if="!isLoading" :posts="sortedAndSearhedPosts" @remove="removePost" />
 		<div v-else>Is Loading...</div>
 	</div>
 </template>
@@ -28,6 +29,7 @@ export default {
 			modalVisible: false,
 			isLoading: false,
 			selectedSort: '',
+			searchQuery: '',
 			sortOptions: [
 				{ value: 'title', name: 'Titre' },
 				{ value: 'body', name: 'Contenu' },
@@ -65,6 +67,9 @@ export default {
 		sortedPosts() {
 			//we sort the new array not the original one
 			return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+		},
+		sortedAndSearhedPosts() {
+			return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
 		}
 	},
 }
